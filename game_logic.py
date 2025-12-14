@@ -15,37 +15,22 @@ DEFAULT_POINTS = {
 
 
 def assign_roles(players: List[Player]) -> List[Player]:
-    """
-    Randomly assign roles to 4 players.
-    Returns updated player list with roles assigned.
-    """
     if len(players) != 4:
         raise ValueError("Exactly 4 players required for role assignment")
-    
-    # Shuffle roles and assign
     shuffled_roles = random.sample(ROLES, len(ROLES))
     
     for i, player in enumerate(players):
         player.role = shuffled_roles[i]
-        player.points = 0  # Reset points for new game
-    
+        player.points = 0 
     return players
 
 
 def calculate_scores(mantri_player: Player, guessed_player_id: str, 
                      chor_player: Player) -> Tuple[Dict[str, int], bool]:
-    """
-    Calculate scores based on Mantri's guess.
-    
-    Returns:
-        - Dictionary of role -> points
-        - Boolean indicating if guess was correct
-    """
+
     guess_correct = (guessed_player_id == chor_player.player_id)
     
     if guess_correct:
-        # Mantri guessed correctly
-        # Mantri and Sipahi keep their points, Chor gets 0
         scores = {
             'Raja': DEFAULT_POINTS['Raja'],
             'Mantri': DEFAULT_POINTS['Mantri'],
@@ -53,8 +38,6 @@ def calculate_scores(mantri_player: Player, guessed_player_id: str,
             'Sipahi': DEFAULT_POINTS['Sipahi']
         }
     else:
-        # Mantri guessed wrong
-        # Chor steals Mantri's and Sipahi's points
         stolen_points = DEFAULT_POINTS['Mantri'] + DEFAULT_POINTS['Sipahi']
         scores = {
             'Raja': DEFAULT_POINTS['Raja'],
@@ -67,9 +50,6 @@ def calculate_scores(mantri_player: Player, guessed_player_id: str,
 
 
 def update_player_scores(players: List[Player], scores: Dict[str, int]) -> List[Player]:
-    """
-    Update player points based on calculated scores.
-    Adds points to cumulative totals.
     """
     for player in players:
         if player.role in scores:
@@ -128,3 +108,4 @@ def prepare_game_result(players: List[Player], game: Game) -> Dict:
         })
     
     return result
+
